@@ -22,7 +22,7 @@ jobs:
         docker run --rm \
           -v /home/oskar/var/www/nginx_certbot_prod:/data \
           alpine \
-          chown -R "${UID}:${GID}" /data || true
+          chown -R "${UID}:${GID}" /data
 
         rm -rf /home/oskar/var/www/nginx_certbot_prod
 
@@ -42,14 +42,14 @@ jobs:
           alpine \
           sh -c "mkdir -p /data/nginx/logs && \
                  chmod -R 755 /data/nginx && \
-                 chown -R ${UID}:${GID} /data/nginx" || true
+                 chown -R ${UID}:${GID} /data/nginx"
 
         docker run --rm \
           -v /home/oskar/var/www/certbot:/data \
           alpine \
           sh -c "mkdir -p /data/certbot/conf /data/certbot/www /data/certbot/logs /data/certbot/work && \
                  chmod -R 755 /data/certbot && \
-                 chown -R ${UID}:${GID} /data/certbot" || true
+                 chown -R ${UID}:${GID} /data/certbot"
 
     - name: Download options-ssl-nginx.conf
       run: |
