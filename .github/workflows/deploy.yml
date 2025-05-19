@@ -32,7 +32,7 @@ jobs:
 
     - name: Stop and clean containers
       run: |
-        cd /home/oskar/var/www/deploy-repo
+        cd /home/oskar/var/www/nginx_certbot_prod
         docker-compose down --volumes
 
     - name: Prepare certbot and nginx directories via Docker
