@@ -1,0 +1,74 @@
+env:
+  UID: 1000
+  GID: 33
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Check user
+      run: |
+        whoami
+        id
+    
+    - name: Reset ownership via Docker and remove old repository
+      run: |
+        docker run --rm \
+          -v /home/oskar/var/www/nginx_certbot_prod:/data \
+          alpine \
+          chown -R "${UID}:${GID}" /data || true
+
+        rm -rf /home/oskar/var/www/nginx_certbot_prod
+
+    - name: Clone fresh repo with submodules
+      run: |
+        git clone git@github.com:OskarKobzaDev/nginx_certbot_prod.git /home/oskar/var/www/nginx_certbot_prod
+
+    - name: Stop and clean containers
+      run: |
+        cd /home/oskar/var/www/deploy-repo
+        docker-compose down --volumes
+
+    - name: Prepare certbot and nginx directories via Docker
+      run: |
+        docker run --rm \
+          -v /home/oskar/var/www/nginx_certbot_prod:/data \
+          alpine \
+          sh -c "mkdir -p /data/nginx/logs && \
+                 chmod -R 755 /data/nginx && \
+                 chown -R ${UID}:${GID} /data/nginx" || true
+
+        docker run --rm \
+          -v /home/oskar/var/www/certbot:/data \
+          alpine \
+          sh -c "mkdir -p /data/certbot/conf /data/certbot/www /data/certbot/logs /data/certbot/work && \
+                 chmod -R 755 /data/certbot && \
+                 chown -R ${UID}:${GID} /data/certbot" || true
+
+    - name: Download options-ssl-nginx.conf
+      run: |
+        curl -sSL https://raw.githubusercontent.com/certbot/certbot/main/certbot-nginx/src/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf \
+          -o /home/oskar/var/www/certbot/conf/options-ssl-nginx.conf
+
+    - name: Start fresh clean containers
+      run: |
+        cd /home/oskar/var/www/nginx_certbot_prod
+        docker-compose up -d --build
+
+    - name: Generate openSSL file
+      run: |
+        openssl dhparam -out /home/oskar/var/www/certbot/conf/ssl-dhparams.pem 2048
+
+    - name: Change nginx configuration to ssl
+      run: |
+        cp /home/oskar/var/www/nginx_certbot_prod/nginx/default-ssl.conf /home/oskar/var/www/nginx_certbot_prod/nginx/default.conf
+    
+    - name: Reload nginx
+      run: |
+        docker restart my-nginx
