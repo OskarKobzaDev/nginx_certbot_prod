@@ -48,8 +48,8 @@ jobs:
           -v /home/oskar/var/www/certbot:/data \
           alpine \
           sh -c "mkdir -p /data/certbot/conf /data/certbot/www /data/certbot/logs /data/certbot/work && \
-                 chmod -R 755 /data/certbot && \
-                 chown -R ${UID}:${GID} /data/certbot"
+                 chmod -R 755 /data && \
+                 chown -R ${UID}:${GID} /data"
 
     - name: Download options-ssl-nginx.conf
       run: |
