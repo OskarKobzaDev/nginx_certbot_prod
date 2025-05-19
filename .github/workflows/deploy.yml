@@ -65,6 +65,24 @@ jobs:
       run: |
         openssl dhparam -out /home/oskar/var/www/certbot/conf/ssl-dhparams.pem 2048
 
+
+    #RUN next step when there was wipe on certbot dir and there is no ssl_certificates on VPS
+
+    # - name: Run certbot for oskarkobza.pl i storytimedemo
+    #   run: |
+    #     cd /home/oskar/var/www/deploy-repo
+    #     docker-compose run --rm certbot_init certonly \
+    #       --webroot \
+    #       -w /var/www/certbot \                                             #
+    #       --email oskar@oskarkobza.pl \
+    #       -d oskarkobza.pl -d www.oskarkobza.pl \
+    #       -d storytimedemo.oskarkobza.pl -d www.storytimedemo.oskarkobza.pl \
+    #       --agree-tos \
+    #       --no-eff-email \
+    #       --force-renewal
+
+    #Run next two steps ONLY when certificates are in place and apps from deploy repo are up
+
     # - name: Change nginx configuration to ssl
     #   run: |
     #     cp /home/oskar/var/www/nginx_certbot_prod/nginx/default-ssl.conf /home/oskar/var/www/nginx_certbot_prod/nginx/default.conf
