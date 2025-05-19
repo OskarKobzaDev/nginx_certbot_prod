@@ -65,10 +65,10 @@ jobs:
       run: |
         openssl dhparam -out /home/oskar/var/www/certbot/conf/ssl-dhparams.pem 2048
 
-    - name: Change nginx configuration to ssl
-      run: |
-        cp /home/oskar/var/www/nginx_certbot_prod/nginx/default-ssl.conf /home/oskar/var/www/nginx_certbot_prod/nginx/default.conf
+    # - name: Change nginx configuration to ssl
+    #   run: |
+    #     cp /home/oskar/var/www/nginx_certbot_prod/nginx/default-ssl.conf /home/oskar/var/www/nginx_certbot_prod/nginx/default.conf
     
-    - name: Reload nginx
-      run: |
-        docker restart my-nginx
+    # - name: Reload nginx
+    #   run: |
+    #     docker restart my-nginx

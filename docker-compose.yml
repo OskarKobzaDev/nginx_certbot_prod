@@ -45,9 +45,3 @@ services:
       - ../certbot/www:/var/www/certbot
     networks:
       - app-network
-
-volumes:
-  dbdata:
-    driver: local
-  meili_data:
-  redis:
