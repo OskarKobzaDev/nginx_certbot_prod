@@ -47,7 +47,7 @@ jobs:
         docker run --rm \
           -v /home/oskar/var/www/certbot:/data \
           alpine \
-          sh -c "mkdir -p /data/certbot/conf /data/certbot/www /data/certbot/logs /data/certbot/work && \
+          sh -c "mkdir -p /data/conf /data/www /data/logs /data/work && \
                  chmod -R 755 /data && \
                  chown -R ${UID}:${GID} /data"
 
