@@ -83,10 +83,10 @@ jobs:
 
     #Run next two steps ONLY when certificates are in place and apps from deploy repo are up
 
-    # - name: Change nginx configuration to ssl
-    #   run: |
-    #     cp /home/oskar/var/www/nginx_certbot_prod/nginx/default-ssl.conf /home/oskar/var/www/nginx_certbot_prod/nginx/default.conf
+    - name: Change nginx configuration to ssl
+      run: |
+        cp /home/oskar/var/www/nginx_certbot_prod/nginx/default-ssl.conf /home/oskar/var/www/nginx_certbot_prod/nginx/default.conf
     
-    # - name: Reload nginx
-    #   run: |
-    #     docker restart my-nginx
+    - name: Reload nginx
+      run: |
+        docker restart my-nginx
